@@ -4,7 +4,7 @@ const path = require('path');
 const helloRoutes = require('./routes/helloRoutes');
 const worldRoutes = require('./routes/worldRoutes');
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8080;
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
