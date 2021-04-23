@@ -9,7 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Phone from '@material-ui/icons/Phone';
 import Videocam from '@material-ui/icons/Videocam';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   container: {
     width: '100%',
   },
@@ -27,11 +27,20 @@ const useStyles = makeStyles(() => ({
       color: 'rgb(0, 153, 255)',
     },
   },
+  appBar: {
+    position: 'relative',
+  },
+  title: {
+    marginLeft: theme.spacing(2),
+    flex: 1,
+  },
 }));
 
-const ConversationHead = () => {
+const ConversationHead = ({ onVideoCallClick }) => {
   const styles = useStyles();
+
   return (
+    <>
     <ListItem
       ContainerComponent={'div'}
       ContainerProps={{ className: styles.container }}
@@ -46,7 +55,7 @@ const ConversationHead = () => {
         classes={{ primary: styles.primary, secondary: styles.secondary }}
       />
       <ListItemSecondaryAction>
-        <IconButton className={styles.iconBtn}>
+        <IconButton className={styles.iconBtn} onClick={onVideoCallClick}>
           <Phone />
         </IconButton>
         <IconButton className={styles.iconBtn}>
@@ -54,6 +63,7 @@ const ConversationHead = () => {
         </IconButton>
       </ListItemSecondaryAction>
     </ListItem>
+    </>
   );
 };
 
