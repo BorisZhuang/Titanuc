@@ -96,6 +96,14 @@ const theme = responsiveFontSizes(
   })
 );
 
+function usePrevious(value) {
+  const ref = useRef();
+  useEffect(() => {
+    ref.current = value;
+  });
+  return ref.current;
+}
+
 const Chat = () => {
   const {
     user,
@@ -114,6 +122,8 @@ const Chat = () => {
   const [receiverID, setReceiverID] = useState('')
   const [audioMuted, setAudioMuted] = useState(false)
   const [videoMuted, setVideoMuted] = useState(false)
+  const [peerMessages, setPeerMessages] = useState([]);
+  const prevPeerMessages = usePrevious(peerMessages)
 
   const userVideo = useRef();
   const partnerVideo = useRef();
@@ -136,6 +146,34 @@ const Chat = () => {
       setCallerSignal(data.signal);
     })
   }, []);
+
+  const styles = useStyles();
+  const scheme = Layout();
+  scheme.configureHeader(builder => {
+    builder.create('appHeader').registerConfig('xs', {
+      position: 'relative',
+      initialHeight: 60,
+    });
+  });
+  scheme.configureEdgeSidebar(builder => {
+    builder
+      .create('primarySidebar', { anchor: 'left' })
+      .registerTemporaryConfig('xs', {
+        anchor: 'left',
+        width: '30%'
+      })
+      .registerPermanentConfig('md', {
+        width: '25%',
+      });
+  });
+  scheme.enableAutoCollapse('primarySidebar', 'sm');
+  scheme.configureInsetSidebar(builder => {
+    builder
+      .create('secondarySidebar', { anchor: 'right' })
+      .registerAbsoluteConfig('xs', {
+        width: '0%', // this inset side bar is just a placehold, used to push the chat bar to the buttom.
+      });
+  });
 
   const callPeer = (id) => {
     if(id!=='' && users[id] && id!==user.email){
@@ -213,6 +251,11 @@ const Chat = () => {
           }
         });
 
+        peer.on('data', data => {
+          console.log('data: ' + data)
+          setPeerMessages([...prevPeerMessages, {sender: users[id], message: data}])
+        })
+
         peer.on('error', (err)=>{
           handleEndCall()
         })
@@ -265,6 +308,11 @@ const Chat = () => {
         }
       });
 
+      peer.on('data', data => {
+        console.log('data: ' + data)
+        setPeerMessages([...prevPeerMessages, {sender: users[caller], message: data}])
+      })
+
       peer.on('error', (err)=>{
         handleEndCall()
       })
@@ -305,6 +353,11 @@ const Chat = () => {
     setSelectedUser(selectedUser);
   }
 
+  const handleOnSend = (event, message) => {
+    myPeer.current.send(message)
+    console.log(`send ${message}`)
+  }
+
   function renderCall() {
     return callingFriend || callAccepted ? 'block' : 'none'
   }
@@ -329,34 +382,6 @@ const Chat = () => {
       let others = removeKey(user.email, users)
       return Object.values(others)
   }
-
-  const styles = useStyles();
-  const scheme = Layout();
-  scheme.configureHeader(builder => {
-    builder.create('appHeader').registerConfig('xs', {
-      position: 'relative',
-      initialHeight: 60,
-    });
-  });
-  scheme.configureEdgeSidebar(builder => {
-    builder
-      .create('primarySidebar', { anchor: 'left' })
-      .registerTemporaryConfig('xs', {
-        anchor: 'left',
-        width: '30%'
-      })
-      .registerPermanentConfig('md', {
-        width: '25%',
-      });
-  });
-  scheme.enableAutoCollapse('primarySidebar', 'sm');
-  scheme.configureInsetSidebar(builder => {
-    builder
-      .create('secondarySidebar', { anchor: 'right' })
-      .registerAbsoluteConfig('xs', {
-        width: '0%', // this inset side bar is just a placehold, used to push the chat bar to the buttom.
-      });
-  });
 
   let incomingCall;
   if (receivingCall && !callAccepted && !callRejected) {
@@ -480,12 +505,12 @@ const Chat = () => {
                   </InsetSidebar>
                 }
               >
-                <ChatDialog />
+                <ChatDialog messages={peerMessages} myId={user.email}/>
               </InsetContainer>
             </Content>
             <InsetFooter ContainerProps={{ disableGutters: true }}>
               <Box display={'flex'} alignItems={'center'} p={1}>
-                <ChatBar concise={sidebar.primarySidebar.collapsed} />
+                <ChatBar concise={sidebar.primarySidebar.collapsed} onSend={handleOnSend}/>
               </Box>
             </InsetFooter>
           </>

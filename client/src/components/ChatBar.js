@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
@@ -25,15 +25,21 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ChatBar = () => {
+const ChatBar = ({onSend}) => {
   const styles = useStyles();
+  const [message, setMessage] = useState('');
+  const handleChange = (event) => {
+    setMessage(event.target.value)
+  }
+
   return (
     <>
       <InputBase
         className={styles.input}
         placeholder={'Type a message...'}
+        onChange={handleChange}
       />
-      <IconButton className={styles.iconBtn}>
+      <IconButton className={styles.iconBtn} onClick={(event) => onSend(event, message)}>
         <Send className={styles.icon} />
       </IconButton>
     </>

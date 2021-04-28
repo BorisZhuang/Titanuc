@@ -16,32 +16,17 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const ChatDialog = () => {
+const ChatDialog = ({messages, myId}) => {
   const styles = useStyles();
+  const chatMsgs = messages.map(message => {
+    message.sender.email === myId
+    ? <ChatMsg side={'right'} messages={[message.message]} />
+    : <ChatMsg avatar={message.sender.avatar} messages={[message.message]} />
+  })
+
   return (
     <Box p={'16px 30px 12px 10px'}>
-      <ChatMsg
-        avatar={AVATAR}
-        messages={[
-          'Hi Dorrie, How r u doing today?',
-          'What about your presentation?',
-        ]}
-      />
-      <Typography className={styles.date}>FRI 1:46 PM</Typography>
-      <ChatMsg
-        side={'right'}
-        messages={[
-          "I'm doing great on my project, thanks for asking.",
-        ]}
-      />
-      <Typography className={styles.date}>FRI 4:18 PM</Typography>
-      <ChatMsg
-        avatar={AVATAR}
-        messages={[
-          'Great!',
-          'See u later.',
-        ]}
-      />
+      {chatMsgs}
     </Box>
   );
 };
