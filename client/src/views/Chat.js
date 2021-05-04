@@ -107,7 +107,6 @@ const Chat = () => {
   const [selectedUser, setSelectedUser] = useState();
   const [stream, setStream] = useState();
   const [receivingCall, setReceivingCall] = useState(false);
-  const [receivingConnection, setReceivingConnection] = useState(false);
   const [caller, setCaller] = useState("");
   const [callerSignal, setCallerSignal] = useState();
   const [farEnd, setFarEnd] = useState("")
@@ -145,11 +144,8 @@ const Chat = () => {
     })
     socket.current.on("hey2", data => {
       console.log(`received hey2 from ${data.from.email}`)
-      //setReceivingConnection(true)
       setFarEnd(data.from)
       setFarEndSignal(data.signal)
-      //console.log('users: ')
-      //console.log(users)
       acceptPeerConnection(data.from, data.signal)
     })
   }, []); // only once
@@ -157,6 +153,8 @@ const Chat = () => {
    useEffect(() => {
     console.log("use Effect was call")
     if (myPeer.current) {
+      console.log("adding stream")
+      myPeer.current.addStream(stream)
       myPeer.current.on("stream", stream => {
         console.log("receiving stream from caller")
         if (partnerVideo.current) {
@@ -276,7 +274,6 @@ const Chat = () => {
       socket.current.on("callAccepted", () => {
         console.log("call was accepte by the callee")
         setCallAccepted(true);
-        //myPeer.current.signal(signal);
       })
 
       socket.current.on('rejected', ()=>{
@@ -289,14 +286,6 @@ const Chat = () => {
         if (userVideo.current) {
           userVideo.current.srcObject = stream;
         }
-
-        console.log("adding stream")
-        myPeer.current.addStream(stream)
-/*         stream.getTracks().forEach(function(track) {
-          myPeer.current.addTrack(track, stream);
-        }); */
-        console.log("The peer is: ")
-        console.log(myPeer.current)
       })
       .catch(() => {
         console.log('You cannot place/ receive a call without granting video and audio permissions!')
@@ -306,11 +295,11 @@ const Chat = () => {
     }
   }
 
-  const acceptPeerConnection = (from, signal2) => {
+  const acceptPeerConnection = (from, peerSignal) => {
     setConnectionAccepted(true)
     if (myPeer.current) {
       console.log("acceptPeerConnection1")
-      myPeer.current.signal(signal2);
+      myPeer.current.signal(peerSignal);
     } else {
       console.log("acceptPeerConnection2")
       const peer = new Peer({
@@ -328,7 +317,7 @@ const Chat = () => {
         setPeerMessages(prevMsgs => [...prevMsgs, {from, to: user, message: data}])
       })
 
-      peer.signal(signal2);
+      peer.signal(peerSignal);
 
       socket.current.on('close', ()=>{
         // todo, close video call page
@@ -340,15 +329,13 @@ const Chat = () => {
   const acceptCall = () => {
     console.log("accept call from: ")
     console.log(farEnd)
-    setCallAccepted(true);
-    socket.current.emit("acceptCall", { to: farEnd.email })
     navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then(stream => {
       setStream(stream);
+      setCallAccepted(true);
+      socket.current.emit("acceptCall", { to: farEnd.email })
       if (userVideo.current) {
         userVideo.current.srcObject = stream;
       }
-      myPeer.current.addStream(stream);
-
       myPeer.current.on('error', (err)=>{
         handleEndCall()
       })
