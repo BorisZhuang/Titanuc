@@ -2,12 +2,8 @@ import React from 'react';
 import styled from 'styled-components';
 import { StylesProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Typography from '@material-ui/core/Typography';
 import Toolbar from '@material-ui/core/Toolbar';
-import Layout, {
-  // HeaderMockUp,
-  NavHeaderMockUp,
-  NavContentMockUp,
+import {
   ContentMockUp,
   FooterMockUp,
 } from '@mui-treasury/mockup/layout';
@@ -15,38 +11,34 @@ import {
   Root,
   getHeader,
   getContent,
-  getDrawerSidebar,
-  getSidebarContent,
   getFooter,
-  getSidebarTrigger,
-  getCollapseBtn,
-  getStandardScheme,
+  getContentBasedScheme
 } from '@mui-treasury/layout';
-import Header from '../components/Header';
+import HeaderEx from '../components/HeaderEx';
 
+const Header = getHeader(styled);
 const Content = getContent(styled);
 const Footer = getFooter(styled);
 
-const standardScheme = getStandardScheme();
+const contentBasedScheme = getContentBasedScheme();
 
 const LandingPage = () => {
   return (
     <StylesProvider injectFirst>
       <CssBaseline />
-      <Root scheme={standardScheme}>
-        {({ state: { sidebar } }) => (
+      <Root scheme={contentBasedScheme}>
+        {() => (
           <>
             <Header>
               <Toolbar>
-                <Header />
+                <HeaderEx />
               </Toolbar>
             </Header>
             <Content>
-              <Typography noWrap>
-                Landing page, Coming soon...
-              </Typography>
+              <ContentMockUp />
             </Content>
             <Footer>
+              <FooterMockUp />
             </Footer>
           </>
         )}
@@ -54,5 +46,6 @@ const LandingPage = () => {
     </StylesProvider>
   );
 };
+
 
 export default LandingPage;
