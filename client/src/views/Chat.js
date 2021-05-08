@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import Box from '@material-ui/core/Box';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
-import Dialog from '@material-ui/core/Dialog';
 import IconButton from '@material-ui/core/IconButton';
 import Grid from '@material-ui/core/Grid';
 import CallEndIcon from '@material-ui/icons/CallEnd';
@@ -97,24 +96,19 @@ const theme = responsiveFontSizes(
 );
 
 const Chat = () => {
-  const {
-    user,
-    isAuthenticated
-  } = useAuth0();
+  const { user } = useAuth0();
 
   const [users, setUsers] = useState({});
   const [selectedUser, setSelectedUser] = useState();
   const [stream, setStream] = useState();
   const [receivingCall, setReceivingCall] = useState(false);
   const [caller, setCaller] = useState("");
-  const [callerSignal, setCallerSignal] = useState();
   const [farEnd, setFarEnd] = useState("")
   const [farEndSignal, setFarEndSignal] = useState();
   const [callingFriend, setCallingFriend] = useState(false);
   const [callAccepted, setCallAccepted] = useState(false);
   const [connectionAccepted, setConnectionAccepted] = useState(false);
   const [callRejected, setCallRejected] = useState(false);
-  const [receiverID, setReceiverID] = useState('')
   const [audioMuted, setAudioMuted] = useState(false)
   const [videoMuted, setVideoMuted] = useState(false)
   const [peerMessages, setPeerMessages] = useState([]);
@@ -140,7 +134,6 @@ const Chat = () => {
       setReceivingCall(true)
       //ringtoneSound.play();
       setCaller(data.from)
-      setCallerSignal(data.signal)
     })
     socket.current.on("hey2", data => {
       console.log(`received hey2 from ${data.from.email}`)
@@ -151,7 +144,6 @@ const Chat = () => {
   }, []); // only once
 
    useEffect(() => {
-    console.log("use Effect was call")
     if (myPeer.current) {
       console.log("adding stream")
       myPeer.current.addStream(stream)

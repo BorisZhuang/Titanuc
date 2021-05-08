@@ -1,8 +1,6 @@
 import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
 import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -10,8 +8,6 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import ChevronLeft from '@material-ui/icons/ChevronLeft';
 import ChevronRight from '@material-ui/icons/ChevronRight';
-import SettingsApplications from '@material-ui/icons/SettingsApplications';
-import Edit from '@material-ui/icons/Edit';
 import { useAuth0 } from '@auth0/auth0-react';
 
 const useStyles = makeStyles(() => ({
@@ -41,10 +37,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const ChatHeader = ({onProfileClick}) => {
-  const {
-    user,
-    isAuthenticated
-  } = useAuth0();
+  const { user } = useAuth0();
   const [actionClicked, setActionClicked] = useState(false);
 
   const styles = useStyles();

@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { StylesProvider } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
 import {
