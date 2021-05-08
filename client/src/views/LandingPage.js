@@ -1,12 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
 import { StylesProvider } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Toolbar from '@material-ui/core/Toolbar';
-import {
-  ContentMockUp,
-  FooterMockUp,
-} from '@mui-treasury/mockup/layout';
 import {
   Root,
   getHeader,
@@ -15,6 +12,8 @@ import {
   getContentBasedScheme
 } from '@mui-treasury/layout';
 import HeaderEx from '../components/HeaderEx';
+import ContentEx from '../components/ContentEx';
+import FooterEx from '../components/FooterEx';
 
 const Header = getHeader(styled);
 const Content = getContent(styled);
@@ -35,10 +34,10 @@ const LandingPage = () => {
               </Toolbar>
             </Header>
             <Content>
-              <ContentMockUp />
+              <ContentEx />
             </Content>
             <Footer>
-              <FooterMockUp />
+              <FooterEx />
             </Footer>
           </>
         )}
