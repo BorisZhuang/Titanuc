@@ -38,7 +38,6 @@ import ChatBar from '../components/ChatBar';
 import ChatList from '../components/ChatList';
 import ChatDialog from '../components/ChatDialog';
 import Profile from '../views/Profile';
-import VideoCall from './VideoCall';
 
 const Header = getHeader(styled);
 const Content = getContent(styled);

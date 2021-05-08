@@ -5,17 +5,12 @@ const httpServer = http.createServer(app)
 const socket = require('socket.io')
 const io = socket(httpServer)
 const path = require('path');
-//const helloRoutes = require('./routes/helloRoutes');
-//const worldRoutes = require('./routes/worldRoutes');
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // From https://facebook.github.io/create-react-app/docs/deployment
 app.use(express.static(path.join(__dirname, '/client/build')));
-
-//app.use('/api/hello', helloRoutes);
-//app.use('/api/world', worldRoutes);
 
 // "catchall" route: for any request that doesn't match any routes above
 // will be redirected to React's index.html file.
@@ -42,7 +37,6 @@ io.on('connection', socket => {
       const newUser = {avatar: picture, ...otherProps};
       users[userId] = newUser
       console.log(`users count, ${Object.keys(users).length}`)
-      //users[userId] = user;
       io.sockets.emit('allUsers', users)
     })
 

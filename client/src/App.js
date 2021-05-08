@@ -1,7 +1,6 @@
 import React from "react";
 import { Router, Route, Switch } from "react-router-dom";
 import Loading from "./components/Loading";
-import Home from "./views/Home";
 import LandingPage from './views/LandingPage';
 import Chat from "./views/Chat";
 import Profile from "./views/Profile";
@@ -12,8 +11,8 @@ import history from "./utils/history";
 import "./App.css";
 
 // fontawesome
-import initFontAwesome from "./utils/initFontAwesome";
-initFontAwesome();
+//import initFontAwesome from "./utils/initFontAwesome";
+//initFontAwesome();
 
 const App = () => {
   const { isLoading, error, isAuthenticated } = useAuth0();

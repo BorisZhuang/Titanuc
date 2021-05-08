@@ -31,7 +31,7 @@ const ChatDialog = ({messages, myId}) => {
     return (
       m.from.email === myId
       ? <ChatMsg side={'right'} messages={m2} />
-      : <ChatMsg avatar={m.from.picture} messages={m2} />
+      : <ChatMsg avatar={m.from.avatar} messages={m2} />
     )
   })
 
